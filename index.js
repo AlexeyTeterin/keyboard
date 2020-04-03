@@ -255,25 +255,29 @@ const KEYBOARD = {
   },
 
   toggleLang() {
+    const { ru, en } = this.elements.layouts;
+    const { keys } = this.elements;
+    const { capsLock, english } = this.properties;
+    const langButtonText = document.getElementById('lang').textContent;
+
     for (let index = 0; index < this.elements.keys.length; index += 1) {
-      const buttonIsSymbol = this.elements.layouts.en[index].length === 1;
+      const buttonIsSymbol = en[index].length === 1;
       // Change only symbol buttons
       if (buttonIsSymbol) {
-        if (this.properties.english) {
-          this.elements.keys[index].textContent = this.elements.layouts.ru[index];
+        if (english) {
+          keys[index].textContent = capsLock ? ru[index].toUpperCase() : ru[index];
         } else {
-          this.elements.keys[index].textContent = this.elements.layouts.en[index];
+          keys[index].textContent = capsLock ? en[index].toUpperCase() : en[index];
         }
       }
     }
-    const langButtonText = document.getElementById('lang').textContent;
+
     if (langButtonText === 'EN') {
       document.getElementById('lang').textContent = 'RU';
     } else document.getElementById('lang').textContent = 'EN';
 
     this.properties.english = !this.properties.english;
   },
-
 
   shiftPress() {
     this.elements.keys.forEach((key) => {
