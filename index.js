@@ -23,6 +23,20 @@ const KEYBOARD = {
         'lshift', 'z', 'x', 'c', 'v', 'b', 'n', 'm', ',', '.', '/', 'uarr', 'shift',
         'ctrl', 'lang', 'alt', 'space', 'alt', 'ctrl', 'larr', 'darr', 'rarr',
       ],
+      ruShifted: [
+        'Ё', '!', '"', '№', ';', '%', ':', '?', '*', '(', ')', '_', '+', 'backspace',
+        'tab', 'Й', 'Ц', 'У', 'К', 'Е', 'Н', 'Г', 'Ш', 'Щ', 'З', 'Х', 'Ъ', '\\',
+        'caps', 'Ф', 'Ы', 'В', 'А', 'П', 'Р', 'О', 'Л', 'Д', 'Ж', 'Э', 'enter',
+        'lshift', 'Я', 'Ч', 'С', 'М', 'И', 'Т', 'Ь', 'Б', 'Ю', ',', 'uarr', 'shift',
+        'ctrl', 'lang', 'alt', 'space', 'alt', 'ctrl', 'larr', 'darr', 'rarr',
+      ],
+      enShifted: [
+        '~', '!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '_', '+', 'backspace',
+        'tab', 'Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P', '{', '}', '|',
+        'caps', 'A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L', ':', '"', 'enter',
+        'lshift', 'Z', 'X', 'C', 'V', 'B', 'N', 'M', '<', '>', '?', 'uarr', 'shift',
+        'ctrl', 'lang', 'alt', 'space', 'alt', 'ctrl', 'larr', 'darr', 'rarr',
+      ],
     },
   },
 
@@ -260,7 +274,7 @@ const KEYBOARD = {
     const { capsLock, english } = this.properties;
     const langButtonText = document.getElementById('lang').textContent;
 
-    for (let index = 0; index < this.elements.keys.length; index += 1) {
+    for (let index = 0; index < keys.length; index += 1) {
       const buttonIsSymbol = en[index].length === 1;
       // Change only symbol buttons
       if (buttonIsSymbol) {
@@ -280,24 +294,55 @@ const KEYBOARD = {
   },
 
   shiftPress() {
-    this.elements.keys.forEach((key) => {
-      const shiftedKey = key;
-      if (key.textContent.length === 1) {
-        shiftedKey.textContent = key.textContent.toUpperCase();
+    const { en, ruShifted, enShifted } = this.elements.layouts;
+    const { keys } = this.elements;
+    const { english } = this.properties;
+
+    for (let index = 0; index < keys.length; index += 1) {
+      const buttonIsSymbol = en[index].length === 1;
+      // Change only symbol buttons
+      if (buttonIsSymbol) {
+        if (english) {
+          keys[index].textContent = enShifted[index];
+        } else {
+          keys[index].textContent = ruShifted[index];
+        }
       }
-    });
+    }
+    // this.elements.keys.forEach((key) => {
+    //   const shiftedKey = key;
+    //   if (key.textContent.length === 1) {
+    //     shiftedKey.textContent = key.textContent.toUpperCase();
+    //   }
+    // });
     this.properties.shift = true;
   },
 
   shiftUnpress() {
-    if (!this.properties.capsLock) {
-      this.elements.keys.forEach((key) => {
-        const unshiftedKey = key;
-        if (key.textContent.length === 1) {
-          unshiftedKey.textContent = key.textContent.toLowerCase();
+    const { ru, en } = this.elements.layouts;
+    const { keys } = this.elements;
+    const { capsLock, english } = this.properties;
+
+    for (let index = 0; index < keys.length; index += 1) {
+      const buttonIsSymbol = en[index].length === 1;
+      // Change only symbol buttons
+      if (buttonIsSymbol) {
+        if (english) {
+          keys[index].textContent = capsLock ? en[index].toUpperCase() : en[index];
         }
-      });
+        if (!english) {
+          keys[index].textContent = capsLock ? ru[index].toUpperCase() : ru[index];
+        }
+      }
     }
+    // if (!this.properties.capsLock) {
+    //   this.elements.keys.forEach((key) => {
+    //     const unshiftedKey = key;
+    //     if (key.textContent.length === 1) {
+    //       unshiftedKey.textContent = key.textContent.toLowerCase();
+    //     }
+    //   });
+    // }
     this.properties.shift = false;
   },
 
