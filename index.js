@@ -14,14 +14,14 @@ const KEYBOARD = {
         'tab', 'й', 'ц', 'у', 'к', 'е', 'н', 'г', 'ш', 'щ', 'з', 'х', 'ъ', '\\',
         'caps', 'ф', 'ы', 'в', 'а', 'п', 'р', 'о', 'л', 'д', 'ж', 'э', 'enter',
         'lshift', 'я', 'ч', 'с', 'м', 'и', 'т', 'ь', 'б', 'ю', '.', 'uarr', 'shift',
-        'ctrl', '', 'alt', 'space', 'alt', 'ctrl', 'larr', 'darr', 'rarr',
+        'ctrl', 'lang', 'alt', 'space', 'alt', 'ctrl', 'larr', 'darr', 'rarr',
       ],
       en: [
         '`', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '=', 'backspace',
         'tab', 'q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', '[', ']', '\\',
         'caps', 'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', ';', '\'', 'enter',
         'lshift', 'z', 'x', 'c', 'v', 'b', 'n', 'm', ',', '.', '/', 'uarr', 'shift',
-        'ctrl', '', 'alt', 'space', 'alt', 'ctrl', 'larr', 'darr', 'rarr',
+        'ctrl', 'lang', 'alt', 'space', 'alt', 'ctrl', 'larr', 'darr', 'rarr',
       ],
     },
   },
@@ -142,6 +142,15 @@ const KEYBOARD = {
           keyElement.id = 'Control';
           break;
 
+        case 'lang':
+          keyElement.classList.add('keyboard__key--dark');
+          keyElement.textContent = 'EN';
+          keyElement.id = 'lang';
+          keyElement.addEventListener('mousedown', () => {
+            this.toggleLang();
+          });
+          break;
+
         case 'alt':
           keyElement.textContent = 'Alt';
           break;
@@ -257,6 +266,11 @@ const KEYBOARD = {
         }
       }
     }
+    const langButtonText = document.getElementById('lang').textContent;
+    if (langButtonText === 'EN') {
+      document.getElementById('lang').textContent = 'RU';
+    } else document.getElementById('lang').textContent = 'EN';
+
     this.properties.english = !this.properties.english;
   },
 
@@ -305,14 +319,13 @@ window.addEventListener('DOMContentLoaded', () => {
 });
 
 // Input from real keyboard
-textarea.onkeydown = (event) => {
+window.onkeydown = (event) => {
   document.querySelectorAll('.keyboard__key').forEach((key) => {
-    if (key.innerText === event.key || key.innerText === event.code || event.key === key.id) {
+    if (key.innerText.toLowerCase() === event.key.toLowerCase() ||
+      key.innerText === event.code ||
+      event.key === key.id) {
       key.classList.add('red');
     }
-    // if (key.innerText === 'Shift') {
-    //   KEYBOARD.shiftPress();
-    // }
   });
 
   switch (event.key) {
@@ -321,15 +334,13 @@ textarea.onkeydown = (event) => {
       break;
 
     case 'Backspace':
-      KEYBOARD.properties.value = KEYBOARD.properties.value
-        .substring(0, KEYBOARD.properties.value.length - 1);
+      // KEYBOARD.properties.value = KEYBOARD.properties.value
+      //   .substring(0, KEYBOARD.properties.value.length - 1);
       break;
 
     case 'CapsLock':
       document.querySelector('#Caps').classList.toggle('keyboard__key--active', !KEYBOARD.properties.capsLock);
       KEYBOARD.toggleCapsLock();
-      // KEYBOARD.properties.capsLock = !KEYBOARD.properties.capsLock;
-
       break;
 
     case 'Shift':
@@ -380,13 +391,21 @@ textarea.onkeydown = (event) => {
   }
 };
 
-textarea.onkeyup = (event) => {
+window.onkeyup = (event) => {
   document.querySelectorAll('.keyboard__key').forEach((key) => {
-    if (key.innerText === event.key || key.innerText === event.code || event.key === key.id) {
+    if (key.innerText.toLowerCase() === event.key.toLowerCase() ||
+      key.innerText === event.code ||
+      event.key === key.id) {
       key.classList.remove('red');
     }
     if (event.key === 'Shift') {
       KEYBOARD.shiftUnpress();
     }
   });
+};
+
+document.onkeydown = (event) => {
+  if (event.key === 'Meta') {
+    KEYBOARD.toggleLang();
+  }
 };
