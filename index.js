@@ -319,7 +319,7 @@ window.addEventListener('DOMContentLoaded', () => {
 });
 
 // Input from real keyboard
-window.onkeydown = (event) => {
+textarea.onkeydown = (event) => {
   document.querySelectorAll('.keyboard__key').forEach((key) => {
     if (key.innerText.toLowerCase() === event.key.toLowerCase() ||
       key.innerText === event.code ||
@@ -344,6 +344,9 @@ window.onkeydown = (event) => {
       break;
 
     case 'Shift':
+      if (KEYBOARD.properties.ctrl === true) {
+        KEYBOARD.toggleLang();
+      }
       KEYBOARD.shiftPress();
       break;
 
@@ -391,7 +394,7 @@ window.onkeydown = (event) => {
   }
 };
 
-window.onkeyup = (event) => {
+textarea.onkeyup = (event) => {
   document.querySelectorAll('.keyboard__key').forEach((key) => {
     if (key.innerText.toLowerCase() === event.key.toLowerCase() ||
       key.innerText === event.code ||
@@ -402,10 +405,4 @@ window.onkeyup = (event) => {
       KEYBOARD.shiftUnpress();
     }
   });
-};
-
-document.onkeydown = (event) => {
-  if (event.key === 'Meta') {
-    KEYBOARD.toggleLang();
-  }
 };
