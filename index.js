@@ -377,6 +377,11 @@ textarea.onkeydown = (event) => {
     }
   });
 
+  const keySet = [];
+  KEYBOARD.elements.keys.forEach((key) => {
+    keySet.push(key.textContent);
+  });
+
   switch (event.key) {
     case 'Enter':
       KEYBOARD.properties.value += '\n';
@@ -426,7 +431,8 @@ textarea.onkeydown = (event) => {
 
     default:
       event.preventDefault();
-      if (event.key.length === 1) {
+      if (event.key.length === 1 && keySet.includes(event.key)) {
+        console.log(event.key);
         switch (KEYBOARD.properties.capsLock || KEYBOARD.properties.shift) {
           case true:
             KEYBOARD.properties.value += event.key.toUpperCase();
