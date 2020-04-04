@@ -2,7 +2,6 @@ document.body.appendChild(document.createElement('textarea'));
 const textarea = document.querySelector('textarea');
 textarea.classList.add('use-keyboard');
 
-
 const KEYBOARD = {
   elements: {
     main: null,
@@ -70,6 +69,8 @@ const KEYBOARD = {
         document.querySelector('.use-keyboard').value = currentValue;
       });
     });
+
+    this.langTrigger();
   },
 
   createKeys() {
@@ -142,6 +143,7 @@ const KEYBOARD = {
         case 'shift':
           keyElement.classList.add('keyboard__key--wide');
           keyElement.textContent = 'Shift';
+          keyElement.id = 'shift';
 
           keyElement.addEventListener('mousedown', () => {
             this.shiftPress();
@@ -269,9 +271,17 @@ const KEYBOARD = {
   },
 
   toggleLang() {
-    const { ru, en } = this.elements.layouts;
-    const { keys } = this.elements;
-    const { capsLock, english } = this.properties;
+    const {
+      ru,
+      en,
+    } = this.elements.layouts;
+    const {
+      keys,
+    } = this.elements;
+    const {
+      capsLock,
+      english,
+    } = this.properties;
     const langButtonText = document.getElementById('lang').textContent;
 
     for (let index = 0; index < keys.length; index += 1) {
@@ -293,10 +303,37 @@ const KEYBOARD = {
     this.properties.english = !this.properties.english;
   },
 
+  langTrigger() {
+    let counter = 0;
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Shift' || event.key === 'Control') {
+        counter += 1;
+      }
+      if (counter === 2) {
+        this.toggleLang();
+        counter = 0;
+      }
+    });
+
+    document.addEventListener('keyup', (event) => {
+      if (event.key === 'Shift' || event.key === 'Control') {
+        counter = 0;
+      }
+    });
+  },
+
   shiftPress() {
-    const { en, ruShifted, enShifted } = this.elements.layouts;
-    const { keys } = this.elements;
-    const { english } = this.properties;
+    const {
+      en,
+      ruShifted,
+      enShifted,
+    } = this.elements.layouts;
+    const {
+      keys,
+    } = this.elements;
+    const {
+      english,
+    } = this.properties;
 
     for (let index = 0; index < keys.length; index += 1) {
       const buttonIsSymbol = en[index].length === 1;
@@ -319,9 +356,17 @@ const KEYBOARD = {
   },
 
   shiftUnpress() {
-    const { ru, en } = this.elements.layouts;
-    const { keys } = this.elements;
-    const { capsLock, english } = this.properties;
+    const {
+      ru,
+      en,
+    } = this.elements.layouts;
+    const {
+      keys,
+    } = this.elements;
+    const {
+      capsLock,
+      english,
+    } = this.properties;
 
     for (let index = 0; index < keys.length; index += 1) {
       const buttonIsSymbol = en[index].length === 1;
@@ -335,14 +380,6 @@ const KEYBOARD = {
         }
       }
     }
-    // if (!this.properties.capsLock) {
-    //   this.elements.keys.forEach((key) => {
-    //     const unshiftedKey = key;
-    //     if (key.textContent.length === 1) {
-    //       unshiftedKey.textContent = key.textContent.toLowerCase();
-    //     }
-    //   });
-    // }
     this.properties.shift = false;
   },
 
@@ -368,7 +405,7 @@ window.addEventListener('DOMContentLoaded', () => {
 });
 
 // Input from real keyboard
-textarea.onkeydown = (event) => {
+document.onkeydown = (event) => {
   document.querySelectorAll('.keyboard__key').forEach((key) => {
     if (key.innerText.toLowerCase() === event.key.toLowerCase() ||
       key.innerText === event.code ||
@@ -449,7 +486,7 @@ textarea.onkeydown = (event) => {
   }
 };
 
-textarea.onkeyup = (event) => {
+document.onkeyup = (event) => {
   document.querySelectorAll('.keyboard__key').forEach((key) => {
     if (key.innerText.toLowerCase() === event.key.toLowerCase() ||
       key.innerText === event.code ||
