@@ -411,10 +411,13 @@ const KEYBOARD = {
   langTrigger() {
     let counter = 0;
     document.addEventListener('keydown', (event) => {
-      if (event.key === 'Shift' || event.key === 'Control') {
+      if (event.key === 'Shift') {
         counter += 1;
       }
-      if (counter === 2) {
+      if (event.key === 'Control') {
+        counter += 2000;
+      }
+      if (counter === 2001) {
         this.toggleLang();
         counter = 0;
       }
