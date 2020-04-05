@@ -425,19 +425,26 @@ const KEYBOARD = {
     document.addEventListener('keydown', (event) => {
       if (event.key === 'Shift' && (counter === 5 || counter === 0)) {
         counter += 3;
+        console.log(counter);
       }
       if (event.key === 'Control' && (counter === 3 || counter === 0)) {
         counter += 5;
+        console.log(counter);
       }
-      if (counter === 8) this.toggleLang();
+      if (counter === 8) {
+        this.toggleLang();
+
+      }
     });
 
     document.addEventListener('keyup', (event) => {
-      if (event.key === 'Shift' && (counter > 0)) {
+      if (event.key === 'Shift' && (counter === 3 || counter === 8)) {
         counter -= 3;
+        console.log(counter);
       }
-      if (event.key === 'Control' && counter > 0) {
+      if (event.key === 'Control' && (counter === 5 || counter === 8)) {
         counter -= 5;
+        console.log(counter);
       }
     });
   },
