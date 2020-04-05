@@ -257,8 +257,6 @@ const KEYBOARD = {
 
   // Input from real keyboard
   phisycalInput() {
-    // const en = '`1234567890-=qwertyuiop[]\\asdfghjkl;\'zxcvbnm,./';
-    // const enShifted = '~!@#$%^&*()_+QWERTYUIOP[]ASDFGHJKL:"ZXCVBNM<>?';
     const keySet = [];
     KEYBOARD.elements.keys.forEach((key) => {
       keySet.push(key.textContent);
@@ -279,8 +277,6 @@ const KEYBOARD = {
           break;
 
         case 'Backspace':
-          // KEYBOARD.properties.value = KEYBOARD.properties.value
-          //   .substring(0, KEYBOARD.properties.value.length - 1);
           break;
 
         case 'CapsLock':
@@ -473,12 +469,6 @@ const KEYBOARD = {
         }
       }
     }
-    // this.elements.keys.forEach((key) => {
-    //   const shiftedKey = key;
-    //   if (key.textContent.length === 1) {
-    //     shiftedKey.textContent = key.textContent.toUpperCase();
-    //   }
-    // });
     this.properties.shift = true;
   },
 
