@@ -319,7 +319,6 @@ const KEYBOARD = {
         default:
           event.preventDefault();
           if (event.key.length === 1) {
-            console.log(event.key);
             switch (KEYBOARD.properties.capsLock || KEYBOARD.properties.shift) {
               case true:
                 KEYBOARD.properties.value += event.key.toUpperCase();
@@ -390,7 +389,7 @@ const KEYBOARD = {
     for (let index = 0; index < keys.length; index += 1) {
       const buttonIsSymbol = en[index].length === 1;
       // Change only symbol buttons
-      if (buttonIsSymbol) { 
+      if (buttonIsSymbol) {
         if (english) {
           if (capsLock) {
             keys[index].textContent = shift ? ruShifted[index] : ru[index].toUpperCase();
@@ -421,26 +420,21 @@ const KEYBOARD = {
     document.addEventListener('keydown', (event) => {
       if (event.key === 'Shift' && (counter === 5 || counter === 0)) {
         counter += 3;
-        console.log(counter);
       }
       if (event.key === 'Control' && (counter === 3 || counter === 0)) {
         counter += 5;
-        console.log(counter);
       }
       if (counter === 8) {
         this.toggleLang();
-
       }
     });
 
     document.addEventListener('keyup', (event) => {
       if (event.key === 'Shift' && (counter === 3 || counter === 8)) {
         counter -= 3;
-        console.log(counter);
       }
       if (event.key === 'Control' && (counter === 5 || counter === 8)) {
         counter -= 5;
-        console.log(counter);
       }
     });
   },
