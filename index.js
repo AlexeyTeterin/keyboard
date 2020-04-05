@@ -377,13 +377,16 @@ const KEYBOARD = {
   toggleLang() {
     const {
       ru,
+      ruShifted,
       en,
+      enShifted,
     } = this.elements.layouts;
     const {
       keys,
     } = this.elements;
     const {
       capsLock,
+      shift,
       english,
     } = this.properties;
     const langButtonText = document.getElementById('lang').textContent;
@@ -391,11 +394,20 @@ const KEYBOARD = {
     for (let index = 0; index < keys.length; index += 1) {
       const buttonIsSymbol = en[index].length === 1;
       // Change only symbol buttons
-      if (buttonIsSymbol) {
+      if (buttonIsSymbol) { 
         if (english) {
-          keys[index].textContent = capsLock ? ru[index].toUpperCase() : ru[index];
-        } else {
-          keys[index].textContent = capsLock ? en[index].toUpperCase() : en[index];
+          if (capsLock) {
+            keys[index].textContent = shift ? ruShifted[index] : ru[index].toUpperCase();
+          } else {
+            keys[index].textContent = shift ? ruShifted[index] : ru[index];
+          }
+        }
+        if (!english) {
+          if (capsLock) {
+            keys[index].textContent = shift ? enShifted[index] : en[index].toUpperCase();
+          } else {
+            keys[index].textContent = shift ? enShifted[index] : en[index];
+          }
         }
       }
     }
@@ -411,21 +423,21 @@ const KEYBOARD = {
   langTrigger() {
     let counter = 0;
     document.addEventListener('keydown', (event) => {
-      if (event.key === 'Shift') {
-        counter += 1;
+      if (event.key === 'Shift' && (counter === 5 || counter === 0)) {
+        counter += 3;
       }
-      if (event.key === 'Control') {
-        counter += 2000;
+      if (event.key === 'Control' && (counter === 3 || counter === 0)) {
+        counter += 5;
       }
-      if (counter === 2001) {
-        this.toggleLang();
-        counter = 0;
-      }
+      if (counter === 8) this.toggleLang();
     });
 
     document.addEventListener('keyup', (event) => {
-      if (event.key === 'Shift' || event.key === 'Control') {
-        counter = 0;
+      if (event.key === 'Shift' && (counter > 0)) {
+        counter -= 3;
+      }
+      if (event.key === 'Control' && counter > 0) {
+        counter -= 5;
       }
     });
   },
