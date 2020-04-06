@@ -47,11 +47,6 @@ const KEYBOARD = {
     },
   },
 
-  eventHandlers: {
-    oninput: null,
-    onclose: null,
-  },
-
   properties: {
     value: '',
     capsLock: null,
@@ -76,12 +71,6 @@ const KEYBOARD = {
     this.elements.info.classList.add('info');
     this.elements.info.textContent = 'Press Shift + Ctrl to change language';
     document.body.appendChild(this.elements.info);
-
-    document.querySelector('.use-keyboard').addEventListener('focus', () => {
-      this.open(document.querySelector('.use-keyboard').value, (currentValue) => {
-        document.querySelector('.use-keyboard').value = currentValue;
-      });
-    });
 
     if (localStorage.capsLock === 'true') {
       this.toggleCapsLock();
@@ -123,9 +112,14 @@ const KEYBOARD = {
           keyElement.textContent = 'Backspace';
 
           keyElement.addEventListener('click', () => {
-            this.properties.value = this.properties.value
-              .substring(0, this.properties.value.length - 1);
-            this.triggerEvent('oninput');
+            if (textarea.selectionStart === 0 && textarea.selectionEnd === textarea.selectionStart) {
+              return;
+            }
+            if (textarea.selectionEnd === textarea.selectionStart) {
+              textarea.setRangeText('', textarea.selectionStart - 1, textarea.selectionEnd, 'end');
+            } else {
+              textarea.setRangeText('', textarea.selectionStart, textarea.selectionEnd, 'end');
+            }
           });
           break;
 
@@ -135,8 +129,8 @@ const KEYBOARD = {
 
           keyElement.addEventListener('click', (e) => {
             e.preventDefault();
-            this.properties.value += '\t';
-            this.triggerEvent('oninput');
+            textarea.setRangeText('\t', textarea.selectionStart, textarea.selectionEnd, 'end');
+
           });
           break;
 
@@ -211,8 +205,7 @@ const KEYBOARD = {
           keyElement.textContent = 'Enter';
 
           keyElement.addEventListener('click', () => {
-            this.properties.value += '\n';
-            this.triggerEvent('oninput');
+            textarea.setRangeText('\n', textarea.selectionStart, textarea.selectionEnd, 'end');
           });
           break;
 
@@ -222,8 +215,7 @@ const KEYBOARD = {
           keyElement.id = 'Space';
 
           keyElement.addEventListener('click', () => {
-            this.properties.value += ' ';
-            this.triggerEvent('oninput');
+            textarea.setRangeText(' ', textarea.selectionStart, textarea.selectionEnd, 'end');
           });
           break;
 
@@ -232,8 +224,7 @@ const KEYBOARD = {
           keyElement.id = 'ArrowDown';
 
           keyElement.addEventListener('click', () => {
-            this.properties.value += '↓';
-            this.triggerEvent('oninput');
+            textarea.setRangeText('↓', textarea.selectionStart, textarea.selectionEnd, 'end');
           });
           break;
 
@@ -242,8 +233,7 @@ const KEYBOARD = {
           keyElement.id = 'ArrowUp';
 
           keyElement.addEventListener('click', () => {
-            this.properties.value += '↑';
-            this.triggerEvent('oninput');
+            textarea.setRangeText('↑', textarea.selectionStart, textarea.selectionEnd, 'end');
           });
           break;
 
@@ -252,8 +242,7 @@ const KEYBOARD = {
           keyElement.id = 'ArrowLeft';
 
           keyElement.addEventListener('click', () => {
-            this.properties.value += '←';
-            this.triggerEvent('oninput');
+            textarea.setRangeText('←', textarea.selectionStart, textarea.selectionEnd, 'end');
           });
           break;
 
@@ -262,8 +251,7 @@ const KEYBOARD = {
           keyElement.id = 'ArrowRight';
 
           keyElement.addEventListener('click', () => {
-            this.properties.value += '→';
-            this.triggerEvent('oninput');
+            textarea.setRangeText('→', textarea.selectionStart, textarea.selectionEnd, 'end');
           });
           break;
 
@@ -271,8 +259,7 @@ const KEYBOARD = {
           keyElement.textContent = key.toLowerCase();
 
           keyElement.addEventListener('click', () => {
-            this.properties.value += keyElement.textContent;
-            this.triggerEvent('oninput');
+            textarea.setRangeText(keyElement.textContent, textarea.selectionStart, textarea.selectionEnd, 'end');
           });
           break;
       }
@@ -289,8 +276,13 @@ const KEYBOARD = {
 
   // Input from real keyboard
   phisycalInput() {
-    const { whichCodes } = this.elements.layouts;
-    const { capsLock, shift } = this.properties;
+    const {
+      whichCodes
+    } = this.elements.layouts;
+    const {
+      capsLock,
+      shift
+    } = this.properties;
     const keySet = [];
     KEYBOARD.elements.keys.forEach((key) => {
       keySet.push(key.textContent);
@@ -392,12 +384,6 @@ const KEYBOARD = {
     };
   },
 
-  triggerEvent(handlerName) {
-    if (typeof this.eventHandlers[handlerName] === 'function') {
-      this.eventHandlers[handlerName](this.properties.value);
-    }
-  },
-
   toggleCapsLock() {
     this.properties.capsLock = !this.properties.capsLock;
     localStorage.capsLock = this.properties.capsLock;
@@ -426,7 +412,9 @@ const KEYBOARD = {
       shift,
       english,
     } = this.properties;
-    const { keys } = this.elements;
+    const {
+      keys
+    } = this.elements;
     const langButtonText = document.getElementById('lang').textContent;
 
     for (let index = 0; index < keys.length; index += 1) {
@@ -541,24 +529,9 @@ const KEYBOARD = {
 
     this.phisycalInput();
   },
-
-  open(initialValue, oninput, onclose) {
-    this.properties.value = initialValue || '';
-    this.eventHandlers.oninput = oninput;
-    this.eventHandlers.onclose = onclose;
-    this.elements.main.classList.remove('hidden');
-  },
-
-  close() {
-    this.properties.value = '';
-    this.eventHandlers.oninput = oninput;
-    this.eventHandlers.onclose = onclose;
-    this.elements.main.classList.add('hidden');
-  },
 };
 
 window.addEventListener('DOMContentLoaded', () => {
   KEYBOARD.init();
-  KEYBOARD.open();
   textarea.focus();
 });
