@@ -13,28 +13,34 @@ const KEYBOARD = {
         'tab', 'й', 'ц', 'у', 'к', 'е', 'н', 'г', 'ш', 'щ', 'з', 'х', 'ъ', '\\',
         'caps', 'ф', 'ы', 'в', 'а', 'п', 'р', 'о', 'л', 'д', 'ж', 'э', 'enter',
         'lshift', 'я', 'ч', 'с', 'м', 'и', 'т', 'ь', 'б', 'ю', '.', 'uarr', 'shift',
-        'ctrl', 'lang', 'alt', 'space', 'alt', 'ctrl', 'larr', 'darr', 'rarr',
+        'lctrl', 'lang', 'lalt', ' ', 'alt', 'ctrl', 'larr', 'darr', 'rarr',
       ],
       en: [
         '`', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '=', 'backspace',
         'tab', 'q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', '[', ']', '\\',
         'caps', 'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', ';', '\'', 'enter',
         'lshift', 'z', 'x', 'c', 'v', 'b', 'n', 'm', ',', '.', '/', 'uarr', 'shift',
-        'ctrl', 'lang', 'alt', 'space', 'alt', 'ctrl', 'larr', 'darr', 'rarr',
+        'lctrl', 'lang', 'lalt', ' ', 'alt', 'ctrl', 'larr', 'darr', 'rarr',
       ],
       ruShifted: [
         'Ё', '!', '"', '№', ';', '%', ':', '?', '*', '(', ')', '_', '+', 'backspace',
-        'tab', 'Й', 'Ц', 'У', 'К', 'Е', 'Н', 'Г', 'Ш', 'Щ', 'З', 'Х', 'Ъ', '\\',
+        'tab', 'Й', 'Ц', 'У', 'К', 'Е', 'Н', 'Г', 'Ш', 'Щ', 'З', 'Х', 'Ъ', '/',
         'caps', 'Ф', 'Ы', 'В', 'А', 'П', 'Р', 'О', 'Л', 'Д', 'Ж', 'Э', 'enter',
         'lshift', 'Я', 'Ч', 'С', 'М', 'И', 'Т', 'Ь', 'Б', 'Ю', ',', 'uarr', 'shift',
-        'ctrl', 'lang', 'alt', 'space', 'alt', 'ctrl', 'larr', 'darr', 'rarr',
+        'lctrl', 'lang', 'lalt', ' ', 'alt', 'ctrl', 'larr', 'darr', 'rarr',
       ],
       enShifted: [
         '~', '!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '_', '+', 'backspace',
         'tab', 'Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P', '{', '}', '|',
         'caps', 'A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L', ':', '"', 'enter',
         'lshift', 'Z', 'X', 'C', 'V', 'B', 'N', 'M', '<', '>', '?', 'uarr', 'shift',
-        'ctrl', 'lang', 'alt', 'space', 'alt', 'ctrl', 'larr', 'darr', 'rarr',
+        'lctrl', 'lang', 'lalt', ' ', 'alt', 'ctrl', 'larr', 'darr', 'rarr',
+      ],
+      whichCodes: [
+        192, 49, 50, 51, 52, 53, 54, 55, 56, 57, 48, 189, 187, 8,
+        9, 81, 87, 69, 82, 84, 89, 85, 73, 79, 80, 219, 221, 220,
+        20, 65, 83, 68, 70, 71, 72, 74, 75, 76, 186, 222, 13,
+        999, 90, 88, 67, 86, 66, 78, 77, 188, 190, 191,
       ],
     },
   },
@@ -135,6 +141,7 @@ const KEYBOARD = {
         case 'lshift':
           keyElement.classList.add('keyboard__key--wide');
           keyElement.textContent = 'Shift';
+          keyElement.id = 'ShiftLeft';
 
           keyElement.addEventListener('mousedown', () => {
             this.shiftPress();
@@ -147,7 +154,7 @@ const KEYBOARD = {
         case 'shift':
           keyElement.classList.add('keyboard__key--wide');
           keyElement.textContent = 'Shift';
-          keyElement.id = 'shift';
+          keyElement.id = 'ShiftRight';
 
           keyElement.addEventListener('mousedown', () => {
             this.shiftPress();
@@ -159,7 +166,12 @@ const KEYBOARD = {
 
         case 'ctrl':
           keyElement.textContent = 'Ctrl';
-          keyElement.id = 'Control';
+          keyElement.id = 'ControlRight';
+          break;
+
+        case 'lctrl':
+          keyElement.textContent = 'Ctrl';
+          keyElement.id = 'ControlLeft';
           break;
 
         case 'lang':
@@ -171,8 +183,14 @@ const KEYBOARD = {
           });
           break;
 
+        case 'lalt':
+          keyElement.textContent = 'Alt';
+          keyElement.id = 'AltLeft';
+          break;
+
         case 'alt':
           keyElement.textContent = 'Alt';
+          keyElement.id = 'AltRight';
           break;
 
         case 'enter':
@@ -185,9 +203,9 @@ const KEYBOARD = {
           });
           break;
 
-        case 'space':
+        case ' ':
           keyElement.classList.add('keyboard__key--extra-wide');
-          keyElement.textContent = 'Space';
+          keyElement.textContent = ' ';
 
           keyElement.addEventListener('click', () => {
             this.properties.value += ' ';
@@ -257,16 +275,27 @@ const KEYBOARD = {
 
   // Input from real keyboard
   phisycalInput() {
+    const {
+      whichCodes,
+    } = this.elements.layouts;
+    const {
+      capsLock,
+      shift,
+    } = this.properties;
     const keySet = [];
     KEYBOARD.elements.keys.forEach((key) => {
       keySet.push(key.textContent);
     });
 
     document.onkeydown = (event) => {
+      const pos = whichCodes.indexOf(event.which);
+
+      let counter = -1;
       document.querySelectorAll('.keyboard__key').forEach((key) => {
-        if (key.innerText.toLowerCase() === event.key.toLowerCase() ||
-          key.innerText === event.code ||
-          event.key === key.id) {
+        counter += 1;
+        if (key.innerText === event.code ||
+          event.code === key.id ||
+          pos === counter) {
           key.classList.add('red');
         }
       });
@@ -319,15 +348,20 @@ const KEYBOARD = {
         default:
           event.preventDefault();
           if (event.key.length === 1) {
-            switch (KEYBOARD.properties.capsLock || KEYBOARD.properties.shift) {
+            switch (capsLock || shift) {
               case true:
-                KEYBOARD.properties.value += event.key.toUpperCase();
-                textarea.value += event.key.toUpperCase();
+                // if (shift && pos <= 12 && pos >= 1) {
+                //   KEYBOARD.properties.value += english ? enShifted[pos] : ruShifted[pos];
+                //   textarea.value += english ? enShifted[pos] : ruShifted[pos];
+                // } else {
+                KEYBOARD.properties.value += keySet[pos].toUpperCase();
+                textarea.value += keySet[pos].toUpperCase();
+                // }
                 break;
 
               default:
-                KEYBOARD.properties.value += event.key.toLowerCase();
-                textarea.value += event.key.toLowerCase();
+                KEYBOARD.properties.value += keySet[pos].toLowerCase();
+                textarea.value += keySet[pos].toLowerCase();
                 break;
             }
           }
@@ -336,10 +370,16 @@ const KEYBOARD = {
     };
 
     document.onkeyup = (event) => {
+      const pos = whichCodes.indexOf(event.which);
+      // if (pos === -1) pos = ruShifted.indexOf(event.key);
+      // if (pos === -1) pos = enShifted.indexOf(event.key);
+
+      let counter = -1;
       document.querySelectorAll('.keyboard__key').forEach((key) => {
-        if (key.innerText.toLowerCase() === event.key.toLowerCase() ||
-          key.innerText === event.code ||
-          event.key === key.id) {
+        counter += 1;
+        if (key.innerText === event.code ||
+          event.code === key.id ||
+          pos === counter) {
           key.classList.remove('red');
         }
         if (event.key === 'Shift') {
@@ -367,6 +407,8 @@ const KEYBOARD = {
       }
       return resultKey;
     });
+
+    this.phisycalInput();
   },
 
   toggleLang() {
@@ -413,6 +455,8 @@ const KEYBOARD = {
 
     localStorage.setItem('english', !this.properties.english);
     this.properties.english = !this.properties.english;
+
+    this.phisycalInput();
   },
 
   langTrigger() {
@@ -464,6 +508,7 @@ const KEYBOARD = {
       }
     }
     this.properties.shift = true;
+    this.phisycalInput();
   },
 
   shiftUnpress() {
@@ -492,6 +537,8 @@ const KEYBOARD = {
       }
     }
     this.properties.shift = false;
+
+    this.phisycalInput();
   },
 
   open(initialValue, oninput, onclose) {
