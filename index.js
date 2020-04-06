@@ -352,21 +352,17 @@ const KEYBOARD = {
           textarea.value += '←';
           break;
 
-        case ' ':
-          textarea.value += ' ';
-          break;
-
         default:
           event.preventDefault();
           if (event.key.length === 1) {
             switch (capsLock || shift) {
               case true:
-                KEYBOARD.properties.value += pos > -1 ? keySet[pos].toUpperCase() : event.key;
+                // KEYBOARD.properties.value += pos > -1 ? keySet[pos].toUpperCase() : event.key;
                 textarea.value += pos > -1 ? keySet[pos].toUpperCase() : event.key;
                 break;
 
               default:
-                KEYBOARD.properties.value += pos > -1 ? keySet[pos].toLowerCase() : event.key;
+                // KEYBOARD.properties.value += pos > -1 ? keySet[pos].toLowerCase() : event.key;
                 textarea.value += pos > -1 ? keySet[pos].toLowerCase() : event.key;
                 break;
             }
