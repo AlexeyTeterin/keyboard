@@ -52,7 +52,7 @@ const KEYBOARD = {
 
   properties: {
     value: '',
-    capsLock: false,
+    capsLock: null,
     shift: false,
     english: null,
   },
@@ -76,6 +76,11 @@ const KEYBOARD = {
       });
     });
 
+    if (localStorage.capsLock === 'true') {
+      this.toggleCapsLock();
+      document.querySelector('#Caps').classList.toggle('keyboard__key--active', this.properties.capsLock);
+    }
+
     this.langTrigger();
 
     this.phisycalInput();
@@ -85,6 +90,7 @@ const KEYBOARD = {
     const fragment = document.createDocumentFragment();
     let keyLayout = [];
 
+    // Load stored layout
     if (localStorage.english === 'false') {
       this.properties.english = false;
       keyLayout = this.elements.layouts.ru;
