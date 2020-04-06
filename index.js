@@ -298,6 +298,7 @@ const KEYBOARD = {
 
     document.onkeydown = (event) => {
       const pos = whichCodes.indexOf(event.which);
+      const inputChar = pos > -1 ? keySet[pos].toLowerCase() : event.key;
       let counter = -1;
 
       document.querySelectorAll('.keyboard__key').forEach((key) => {
@@ -309,7 +310,6 @@ const KEYBOARD = {
 
       switch (event.key) {
         case 'Enter':
-          KEYBOARD.properties.value += '\n';
           break;
 
         case 'Backspace':
@@ -329,27 +329,32 @@ const KEYBOARD = {
 
         case 'Tab':
           event.preventDefault();
-          textarea.value += '\t';
+          textarea
+            .setRangeText('\t', textarea.selectionStart, textarea.selectionEnd, 'end');
           break;
 
         case 'ArrowUp':
           event.preventDefault();
-          textarea.value += '↑';
+          textarea
+            .setRangeText('↑', textarea.selectionStart, textarea.selectionEnd, 'end');
           break;
 
         case 'ArrowDown':
           event.preventDefault();
-          textarea.value += '↓';
+          textarea
+            .setRangeText('↓', textarea.selectionStart, textarea.selectionEnd, 'end');
           break;
 
         case 'ArrowRight':
           event.preventDefault();
-          textarea.value += '→';
+          textarea
+            .setRangeText('→', textarea.selectionStart, textarea.selectionEnd, 'end');
           break;
 
         case 'ArrowLeft':
           event.preventDefault();
-          textarea.value += '←';
+          textarea
+            .setRangeText('←', textarea.selectionStart, textarea.selectionEnd, 'end');
           break;
 
         default:
@@ -357,13 +362,13 @@ const KEYBOARD = {
           if (event.key.length === 1) {
             switch (capsLock || shift) {
               case true:
-                // KEYBOARD.properties.value += pos > -1 ? keySet[pos].toUpperCase() : event.key;
-                textarea.value += pos > -1 ? keySet[pos].toUpperCase() : event.key;
+                textarea
+                  .setRangeText(inputChar.toUpperCase(), textarea.selectionStart, textarea.selectionEnd, 'end');
                 break;
 
               default:
-                // KEYBOARD.properties.value += pos > -1 ? keySet[pos].toLowerCase() : event.key;
-                textarea.value += pos > -1 ? keySet[pos].toLowerCase() : event.key;
+                textarea
+                  .setRangeText(inputChar, textarea.selectionStart, textarea.selectionEnd, 'end');
                 break;
             }
           }
