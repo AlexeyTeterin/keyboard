@@ -1,9 +1,11 @@
 document.body.appendChild(document.createElement('textarea'));
 const textarea = document.querySelector('textarea');
 textarea.classList.add('use-keyboard');
+textarea.setAttribute('placeholder', 'Type your text here...');
 
 const KEYBOARD = {
   elements: {
+    info: '',
     main: null,
     keysContainer: null,
     keys: [],
@@ -69,6 +71,11 @@ const KEYBOARD = {
 
     this.elements.main.appendChild(this.elements.keysContainer);
     document.body.appendChild(this.elements.main);
+
+    this.elements.info = document.body.appendChild(document.createElement('div'));
+    this.elements.info.classList.add('info');
+    this.elements.info.textContent = 'Press Shift + Ctrl to change language';
+    document.body.appendChild(this.elements.info);
 
     document.querySelector('.use-keyboard').addEventListener('focus', () => {
       this.open(document.querySelector('.use-keyboard').value, (currentValue) => {
@@ -212,6 +219,7 @@ const KEYBOARD = {
         case ' ':
           keyElement.classList.add('keyboard__key--extra-wide');
           keyElement.textContent = ' ';
+          keyElement.id = 'Space';
 
           keyElement.addEventListener('click', () => {
             this.properties.value += ' ';
@@ -349,6 +357,10 @@ const KEYBOARD = {
         case 'ArrowLeft':
           event.preventDefault();
           textarea.value += '←';
+          break;
+
+        case ' ':
+          textarea.value += ' ';
           break;
 
         default:
