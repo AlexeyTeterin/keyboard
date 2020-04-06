@@ -361,13 +361,13 @@ const KEYBOARD = {
           if (event.key.length === 1) {
             switch (capsLock || shift) {
               case true:
-                KEYBOARD.properties.value += keySet[pos].toUpperCase();
-                textarea.value += keySet[pos].toUpperCase();
+                KEYBOARD.properties.value += pos > -1 ? keySet[pos].toUpperCase() : event.key;
+                textarea.value += pos > -1 ? keySet[pos].toUpperCase() : event.key;
                 break;
 
               default:
-                KEYBOARD.properties.value += keySet[pos].toLowerCase();
-                textarea.value += keySet[pos].toLowerCase();
+                KEYBOARD.properties.value += pos > -1 ? keySet[pos].toLowerCase() : event.key;
+                textarea.value += pos > -1 ? keySet[pos].toLowerCase() : event.key;
                 break;
             }
           }
