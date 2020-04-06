@@ -97,7 +97,7 @@ const KEYBOARD = {
     const fragment = document.createDocumentFragment();
     let keyLayout = [];
 
-    // Load stored layout
+    // Load stored language
     if (localStorage.english === 'false') {
       this.properties.english = false;
       keyLayout = this.elements.layouts.ru;
@@ -289,13 +289,8 @@ const KEYBOARD = {
 
   // Input from real keyboard
   phisycalInput() {
-    const {
-      whichCodes,
-    } = this.elements.layouts;
-    const {
-      capsLock,
-      shift,
-    } = this.properties;
+    const { whichCodes } = this.elements.layouts;
+    const { capsLock, shift } = this.properties;
     const keySet = [];
     KEYBOARD.elements.keys.forEach((key) => {
       keySet.push(key.textContent);
@@ -303,13 +298,11 @@ const KEYBOARD = {
 
     document.onkeydown = (event) => {
       const pos = whichCodes.indexOf(event.which);
-
       let counter = -1;
+
       document.querySelectorAll('.keyboard__key').forEach((key) => {
         counter += 1;
-        if (key.innerText === event.code ||
-          event.code === key.id ||
-          pos === counter) {
+        if (key.innerText === event.code || event.code === key.id || pos === counter) {
           key.classList.add('red');
         }
       });
@@ -368,13 +361,8 @@ const KEYBOARD = {
           if (event.key.length === 1) {
             switch (capsLock || shift) {
               case true:
-                // if (shift && pos <= 12 && pos >= 1) {
-                //   KEYBOARD.properties.value += english ? enShifted[pos] : ruShifted[pos];
-                //   textarea.value += english ? enShifted[pos] : ruShifted[pos];
-                // } else {
                 KEYBOARD.properties.value += keySet[pos].toUpperCase();
                 textarea.value += keySet[pos].toUpperCase();
-                // }
                 break;
 
               default:
@@ -389,15 +377,11 @@ const KEYBOARD = {
 
     document.onkeyup = (event) => {
       const pos = whichCodes.indexOf(event.which);
-      // if (pos === -1) pos = ruShifted.indexOf(event.key);
-      // if (pos === -1) pos = enShifted.indexOf(event.key);
 
       let counter = -1;
       document.querySelectorAll('.keyboard__key').forEach((key) => {
         counter += 1;
-        if (key.innerText === event.code ||
-          event.code === key.id ||
-          pos === counter) {
+        if (key.innerText === event.code || event.code === key.id || pos === counter) {
           key.classList.remove('red');
         }
         if (event.key === 'Shift') {
@@ -437,13 +421,11 @@ const KEYBOARD = {
       enShifted,
     } = this.elements.layouts;
     const {
-      keys,
-    } = this.elements;
-    const {
       capsLock,
       shift,
       english,
     } = this.properties;
+    const { keys } = this.elements;
     const langButtonText = document.getElementById('lang').textContent;
 
     for (let index = 0; index < keys.length; index += 1) {
