@@ -112,7 +112,8 @@ const KEYBOARD = {
           keyElement.textContent = 'Backspace';
 
           keyElement.addEventListener('click', () => {
-            if (textarea.selectionStart === 0 && textarea.selectionEnd === textarea.selectionStart) {
+            if (textarea.selectionStart === 0
+              && textarea.selectionEnd === textarea.selectionStart) {
               return;
             }
             if (textarea.selectionEnd === textarea.selectionStart) {
@@ -130,7 +131,6 @@ const KEYBOARD = {
           keyElement.addEventListener('click', (e) => {
             e.preventDefault();
             textarea.setRangeText('\t', textarea.selectionStart, textarea.selectionEnd, 'end');
-
           });
           break;
 
@@ -277,11 +277,11 @@ const KEYBOARD = {
   // Input from real keyboard
   phisycalInput() {
     const {
-      whichCodes
+      whichCodes,
     } = this.elements.layouts;
     const {
       capsLock,
-      shift
+      shift,
     } = this.properties;
     const keySet = [];
     KEYBOARD.elements.keys.forEach((key) => {
@@ -413,7 +413,7 @@ const KEYBOARD = {
       english,
     } = this.properties;
     const {
-      keys
+      keys,
     } = this.elements;
     const langButtonText = document.getElementById('lang').textContent;
 
